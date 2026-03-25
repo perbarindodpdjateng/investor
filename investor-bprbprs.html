@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Investor BPR/BPRS</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:6px;display:flex;justify-content:center;align-items:flex-start}
+        .container{background:#fff;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.2);max-width:420px;width:100%;overflow:hidden;animation:slideUp .3s ease-out}
+        @keyframes slideUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+        .header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:12px 10px;text-align:center}
+        .header h1{font-size:1.1rem;font-weight:600;margin-bottom:2px}
+        .header p{opacity:.9;font-size:.7rem}
+        .form-body{padding:10px}
+        .form-group{margin-bottom:8px}
+        label{display:block;margin-bottom:2px;color:#333;font-weight:500;font-size:.75rem}
+        .required::after{content:" *";color:#e74c3c}
+        input,select,textarea{width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:5px;font-size:.8rem;transition:all .15s;font-family:inherit}
+        input:focus,select:focus,textarea:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 2px rgba(102,126,234,0.08)}
+        textarea{resize:vertical;min-height:50px}
+        .multi-select{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;max-height:120px;overflow-y:auto;padding:4px;border:1px solid #ddd;border-radius:5px;background:#fafafa}
+        .checkbox-item{display:flex;align-items:center;padding:4px 5px;background:#fff;border-radius:3px;cursor:pointer;transition:all .1s;font-size:.7rem}
+        .checkbox-item:hover{background:#f0f0f0}
+        .checkbox-item input[type="checkbox"]{width:auto;margin-right:4px;cursor:pointer;transform:scale(.85)}
+        .checkbox-item.checked{background:#667eea;color:#fff}
+        .nominal-options{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+        .nominal-card{padding:6px 2px;border:1px solid #ddd;border-radius:5px;text-align:center;cursor:pointer;transition:all .15s;font-weight:500;color:#555;font-size:.7rem;line-height:1.1}
+        .nominal-card:hover{border-color:#667eea}
+        .nominal-card.selected{background:#667eea;color:#fff;border-color:#667eea}
+        input[type="radio"]{display:none}
+        .submit-btn{width:100%;padding:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:5px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;margin-top:4px}
+        .submit-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 12px rgba(102,126,234,0.25)}
+        .submit-btn:disabled{opacity:.6;cursor:not-allowed}
+        .submit-btn.loading::after{content:"";position:absolute;width:14px;height:14px;top:50%;left:50%;margin:-7px 0 0 -7px;border:2px solid #fff;border-radius:50%;border-top-color:transparent;animation:spinner .8s linear infinite}
+        @keyframes spinner{to{transform:rotate(360deg)}}
+        .success-message{display:none;background:#d4edda;color:#155724;padding:10px;border-radius:5px;text-align:center;animation:fadeIn .3s}
+        .success-message.show{display:block}
+        .success-message h3{font-size:.9rem;margin-bottom:3px}
+        .success-message p{font-size:.75rem}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        .error-message{color:#e74c3c;font-size:.65rem;margin-top:1px;display:none}
+        .form-group.error input,.form-group.error select{border-color:#e74c3c}
+        .form-group.error .error-message{display:block}
+        @media(max-width:360px){.nominal-options{grid-template-columns:repeat(2,1fr)}.multi-select{grid-template-columns:1fr;max-height:160px}}
+        .multi-select::-webkit-scrollbar{width:5px}
+        .multi-select::-webkit-scrollbar-track{background:#f1f1f1;border-radius:2px}
+        .multi-select::-webkit-scrollbar-thumb{background:#667eea;border-radius:2px}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🎯 Jaring Investor BPR/BPRS</h1>
+        <p>Daftarkan minat investasi Anda di seluruh Indonesia</p>
+    </div>
+    <div class="form-body">
+        <form id="investorForm">
+            <div class="form-group">
+                <label for="nama" class="required">Nama Lengkap</label>
+                <input type="text" id="nama" name="nama" placeholder="Nama lengkap" required>
+                <span class="error-message">Nama wajib diisi</span>
+            </div>
+            <div class="form-group">
+                <label for="email" class="required">Email</label>
+                <input type="email" id="email" name="email" placeholder="email@contoh.com" required>
+                <span class="error-message">Email valid wajib diisi</span>
+            </div>
+            <div class="form-group">
+                <label for="whatsapp" class="required">Nomor WhatsApp</label>
+                <input type="tel" id="whatsapp" name="whatsapp" placeholder="081234567890" required>
+                <span class="error-message">Nomor wajib diisi</span>
+            </div>
+            <div class="form-group">
+                <label for="tipeInvestor" class="required">Tipe Investor</label>
+                <select id="tipeInvestor" name="tipeInvestor" required>
+                    <option value="">Pilih tipe</option>
+                    <option value="Perorangan">Perorangan</option>
+                    <option value="Perusahaan">Perusahaan</option>
+                    <option value="Koperasi">Koperasi</option>
+                    <option value="Lembaga Keuangan">Lembaga Keuangan</option>
+                </select>
+                <span class="error-message">Pilih tipe investor</span>
+            </div>
+            <div class="form-group">
+                <label for="jenisBank" class="required">Jenis Bank Target</label>
+                <select id="jenisBank" name="jenisBank" required>
+                    <option value="">Pilih jenis</option>
+                    <option value="BPR Konvensional">BPR Konvensional</option>
+                    <option value="BPRS Syariah">BPRS Syariah</option>
+                    <option value="Keduanya">Keduanya</option>
+                </select>
+                <span class="error-message">Pilih jenis bank</span>
+            </div>
+            <div class="form-group">
+                <label class="required">Nominal Investasi</label>
+                <div class="nominal-options">
+                    <label class="nominal-card"><input type="radio" name="nominal" value="< Rp 1 Miliar" required>< Rp 1 M</label>
+                    <label class="nominal-card"><input type="radio" name="nominal" value="Rp 1 - 5 Miliar">1 - 5 M</label>
+                    <label class="nominal-card"><input type="radio" name="nominal" value="Rp 5 - 10 Miliar">5 - 10 M</label>
+                    <label class="nominal-card"><input type="radio" name="nominal" value="Rp 10 - 25 Miliar">10 - 25 M</label>
+                    <label class="nominal-card"><input type="radio" name="nominal" value="Rp 25 - 50 Miliar">25 - 50 M</label>
+                    <label class="nominal-card"><input type="radio" name="nominal" value="> Rp 50 Miliar">> 50 M</label>
+                </div>
+                <span class="error-message">Pilih nominal</span>
+            </div>
+            <div class="form-group">
+                <label class="required">Wilayah Target</label>
+                <div class="multi-select" id="wilayahContainer"></div>
+                <input type="hidden" id="wilayahTarget" name="wilayahTarget" required>
+                <span class="error-message">Pilih minimal satu wilayah</span>
+            </div>
+            <div class="form-group">
+                <label for="pesan">Pesan/Pertanyaan (Opsional)</label>
+                <textarea id="pesan" name="pesan" placeholder="Tuliskan pertanyaan tambahan..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn" id="submitBtn">Kirim Pendaftaran</button>
+        </form>
+        <div class="success-message" id="successMessage">
+            <h3>✅ Terima Kasih!</h3>
+            <p>Data tersimpan. Tim kami akan menghubungi Anda dalam 1-2 hari kerja.</p>
+        </div>
+    </div>
+</div>
+<script>
+const provinsiList=["Aceh","Sumatera Utara","Sumatera Barat","Riau","Kepulauan Riau","Jambi","Sumatera Selatan","Bangka Belitung","Bengkulu","Lampung","DKI Jakarta","Banten","Jawa Barat","Jawa Tengah","DI Yogyakarta","Jawa Timur","Bali","NTB","NTT","Kalimantan Barat","Kalimantan Tengah","Kalimantan Selatan","Kalimantan Timur","Kalimantan Utara","Sulawesi Utara","Sulawesi Tengah","Sulawesi Selatan","Sulawesi Tenggara","Gorontalo","Sulawesi Barat","Maluku","Maluku Utara","Papua Barat","Papua","Papua Selatan","Papua Tengah","Papua Pegunungan"];
+const wilayahContainer=document.getElementById('wilayahContainer'),wilayahInput=document.getElementById('wilayahTarget');
+provinsiList.forEach(prov=>{const item=document.createElement('label');item.className='checkbox-item';item.innerHTML=`<input type="checkbox" value="${prov}"><span>${prov}</span>`;item.querySelector('input').addEventListener('change',function(){item.classList.toggle('checked',this.checked);updateWilayahInput()});wilayahContainer.appendChild(item)});
+function updateWilayahInput(){wilayahInput.value=Array.from(document.querySelectorAll('.checkbox-item input:checked')).map(cb=>cb.value).join(', ')}
+document.querySelectorAll('.nominal-card').forEach(card=>{card.addEventListener('click',function(){document.querySelectorAll('.nominal-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected');this.querySelector('input').checked=true})});
+document.getElementById('investorForm').addEventListener('submit',function(e){e.preventDefault();const btn=document.getElementById('submitBtn'),originalText=btn.textContent;if(!wilayahInput.value){wilayahContainer.parentElement.classList.add('error');return}else{wilayahContainer.parentElement.classList.remove('error')}btn.disabled=true;btn.classList.add('loading');btn.textContent='Mengirim...';const formData={nama:document.getElementById('nama').value,email:document.getElementById('email').value,whatsapp:document.getElementById('whatsapp').value,tipeInvestor:document.getElementById('tipeInvestor').value,jenisBank:document.getElementById('jenisBank').value,nominal:document.querySelector('input[name="nominal"]:checked')?.value||'',wilayahTarget:wilayahInput.value,pesan:document.getElementById('pesan').value};const GAS_URL='https://script.google.com/macros/s/AKfycbyl2WbGKFArlxUk9r_ZHRvHjMpKrosxUeQFWjjIrgJTnfCVO-GRdf1b1zM51JAShSdPlg/exec';const postData=new URLSearchParams();for(let key in formData)postData.append(key,formData[key]);fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:postData}).then(()=>{setTimeout(()=>{document.getElementById('investorForm').style.display='none';document.getElementById('successMessage').classList.add('show')},800)}).catch(error=>{console.error('Error:',error);alert('Terjadi kesalahan koneksi. Silakan coba lagi.');btn.disabled=false;btn.classList.remove('loading');btn.textContent=originalText})});
+document.querySelectorAll('input[required],select[required]').forEach(field=>{field.addEventListener('blur',function(){this.parentElement.classList.toggle('error',!this.value)})});
+</script>
+</body>
+</html>
